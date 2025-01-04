@@ -21,7 +21,8 @@ jobs:
     - name: Install stopit
       run: |
         python -m pip install --upgrade pip
+        pip install "setuptools>=70.0.0" packaging pytest
         pip install -e .
-    - name: Test Mathics
+    - name: Test stopit
       run: |
         python tests.py
