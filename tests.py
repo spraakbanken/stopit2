@@ -25,7 +25,7 @@ class TestNesting(unittest.TestCase):
         (ThreadingTimeout,
             SignalTimeout,)
         if os.name == "posix"
-        else (ThreadingTimeOut,)
+        else (ThreadingTimeout,)
     )
 
     def aware_wait(self, duration):
