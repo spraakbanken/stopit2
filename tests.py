@@ -22,7 +22,8 @@ threading_globs = {"Timeout": ThreadingTimeout, "timeoutable": threading_timeout
 
 class TestNesting(unittest.TestCase):
     handlers = (
-        (ThreadingTimeout,)  # SignalTimeout,
+        (ThreadingTimeout,
+            SignalTimeout,)
         if os.name == "posix"
         else (ThreadingTimeOut,)
     )
@@ -43,12 +44,12 @@ class TestNesting(unittest.TestCase):
                     self.aware_wait(duration)
                     return "success"
         except TimeoutException:
-            if ThreadingTimeout.exception_source is to_ctx_mgr1:
+            if HandlerClass.exception_source is to_ctx_mgr1:
                 return "outer"
-            elif ThreadingTimeout.exception_source is to_ctx_mgr2:
+            elif HandlerClass.exception_source is to_ctx_mgr2:
                 return "inner"
             else:
-                print(ThreadingTimeout.exception_source)
+                print(HandlerClass.exception_source)
                 return "unknown source"
 
     def check_nest_swallow(self, t1, t2, duration, HandlerClass):

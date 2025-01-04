@@ -50,7 +50,6 @@ class ThreadingTimeout(BaseTimeout):
 
     # This class property keep track about who produced the
     # exception.
-    exception_source = None
 
     def __init__(self, seconds, swallow_exc=True):
         # Ensure that any new handler find a clear
@@ -58,35 +57,6 @@ class ThreadingTimeout(BaseTimeout):
         super(ThreadingTimeout, self).__init__(seconds, swallow_exc)
         self.target_tid = threading.current_thread().ident
         self.timer = None  # PEP8
-
-    def __enter__(self):
-        self.__class__.exception_source = None
-        self.state = BaseTimeout.EXECUTING
-        self.setup_interrupt()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        exc_src = self.__class__.exception_source
-        if exc_type is TimeoutException:
-            if self.state != BaseTimeout.TIMED_OUT:
-                self.state = BaseTimeout.INTERRUPTED
-                self.suppress_interrupt()
-            LOG.warning(
-                "Code block execution exceeded {0} seconds timeout".format(
-                    self.seconds
-                ),
-                exc_info=(exc_type, exc_val, exc_tb),
-            )
-            if exc_src is self:
-                if self.swallow_exc:
-                    self.__class__.exception_source = None
-                    return True
-                return False
-        else:
-            if exc_type is None:
-                self.state = BaseTimeout.EXECUTED
-            self.suppress_interrupt()
-        return False
 
     def stop(self):
         """Called by timer thread at timeout. Raises a Timeout exception in the
