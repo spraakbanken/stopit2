@@ -12,7 +12,7 @@ import ctypes
 import sys
 import threading
 
-from .utils import TimeoutException, BaseTimeout, base_timeoutable
+from .utils import LOG, TimeoutException, BaseTimeout, base_timeoutable
 
 if sys.version_info < (3, 7):
     tid_ctype = ctypes.c_long
@@ -30,8 +30,9 @@ def async_raise(target_tid, exception):
     """
     # Ensuring and releasing GIL are useless since we're not in C
     # gil_state = ctypes.pythonapi.PyGILState_Ensure()
-    ret = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid_ctype(target_tid),
-                                                     ctypes.py_object(exception))
+    ret = ctypes.pythonapi.PyThreadState_SetAsyncExc(
+        tid_ctype(target_tid), ctypes.py_object(exception)
+    )
     # ctypes.pythonapi.PyGILState_Release(gil_state)
     if ret == 0:
         raise ValueError("Invalid thread ID {}".format(target_tid))
@@ -46,36 +47,72 @@ class ThreadingTimeout(BaseTimeout):
 
     See :class:`stopit.utils.BaseTimeout` for more information
     """
+
+    # This class property keep track about who produced the
+    # exception.
+    exception_source = None
+
     def __init__(self, seconds, swallow_exc=True):
+        # Ensure that any new handler find a clear
+        # pointer
         super(ThreadingTimeout, self).__init__(seconds, swallow_exc)
         self.target_tid = threading.current_thread().ident
         self.timer = None  # PEP8
+
+    def __enter__(self):
+        self.__class__.exception_source = None
+        self.state = BaseTimeout.EXECUTING
+        self.setup_interrupt()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        exc_src = self.__class__.exception_source
+        if exc_type is TimeoutException:
+            if self.state != BaseTimeout.TIMED_OUT:
+                self.state = BaseTimeout.INTERRUPTED
+                self.suppress_interrupt()
+            LOG.warning(
+                "Code block execution exceeded {0} seconds timeout".format(
+                    self.seconds
+                ),
+                exc_info=(exc_type, exc_val, exc_tb),
+            )
+            if exc_src is self:
+                if self.swallow_exc:
+                    self.__class__.exception_source = None
+                    return True
+                return False
+        else:
+            if exc_type is None:
+                self.state = BaseTimeout.EXECUTED
+            self.suppress_interrupt()
+        return False
 
     def stop(self):
         """Called by timer thread at timeout. Raises a Timeout exception in the
         caller thread
         """
         self.state = BaseTimeout.TIMED_OUT
+        self.__class__.exception_source = self
         async_raise(self.target_tid, TimeoutException)
 
     # Required overrides
     def setup_interrupt(self):
-        """Setting up the resource that interrupts the block
-        """
+        """Setting up the resource that interrupts the block"""
         self.timer = threading.Timer(self.seconds, self.stop)
         self.timer.start()
 
     def suppress_interrupt(self):
-        """Removing the resource that interrupts the block
-        """
+        """Removing the resource that interrupts the block"""
         self.timer.cancel()
 
 
-class threading_timeoutable(base_timeoutable):  #noqa
+class threading_timeoutable(base_timeoutable):  # noqa
     """A function or method decorator that raises a ``TimeoutException`` to
     decorated functions that should not last a certain amount of time.
     this one uses ``ThreadingTimeout`` context manager.
 
     See :class:`.utils.base_timoutable`` class for further comments.
     """
+
     to_ctx_mgr = ThreadingTimeout
