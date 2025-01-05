@@ -1,6 +1,6 @@
 # Copied from SymPy https://github.com/sympy/sympy/pull/27183
 
-name: Mathics3 (Pyodide)
+name: Stopit (Pyodide)
 
 on:
   push:
@@ -56,4 +56,5 @@ jobs:
           python -m pip install --no-build-isolation -e .
       - name: Test stopit
         run: |
+          python -c "import sys; print(sys.path); import your_package_name"	
           python tests.py
