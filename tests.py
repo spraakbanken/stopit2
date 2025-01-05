@@ -22,9 +22,10 @@ threading_globs = {"Timeout": ThreadingTimeout, "timeoutable": threading_timeout
 
 class TestNesting(unittest.TestCase):
     handlers = (
-        (SignalTimeout,
-         ThreadingTimeout,
-            )
+        (
+            SignalTimeout,
+            ThreadingTimeout,
+        )
         if os.name == "posix"
         else (ThreadingTimeout,)
     )
@@ -73,20 +74,10 @@ class TestNesting(unittest.TestCase):
 
     def test_nested_success(self):
         for handler in self.handlers:
-            start_time = time.time()
-            result = self.check_nest_swallow(5.0, 10.0, 1.0, handler)
-            duration = time.time() - start_time
-            print("   execution took", duration, "for ", handler)
             self.assertEqual(
-                result, "success"
+                self.check_nest_swallow(5.0, 10.0, 1.0, handler), "success"
             )
-            start_time = time.time()
-            result = self.check_nest(5.0, 10.0, 1.0, handler)
-            duration = time.time() - start_time
-            print("   execution took", duration, "for ", handler)
-            self.assertEqual(result, "success")
-
-            
+            self.assertEqual(self.check_nest(5.0, 10.0, 1.0, handler), "success")
 
     def test_nested_long_outer(self):
         for handler in self.handlers:
