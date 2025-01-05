@@ -31,8 +31,11 @@ class TestNesting(unittest.TestCase):
 
     def aware_wait(self, duration):
         remaining = duration * 100
+        t_start = time.time()
         while remaining > 0:
             time.sleep(0.01)
+            if time.time() - t_start > duration:
+                return 0
             remaining = remaining - 1
         return 0
 
