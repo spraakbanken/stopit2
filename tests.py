@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-import time
 import doctest
 import os
+import time
 import unittest
 
-from stopit import (
-    TimeoutException,
-    ThreadingTimeout,
-    threading_timeoutable,
+from stopit2 import (
     SignalTimeout,
+    ThreadingTimeout,
+    TimeoutException,
     signal_timeoutable,
+    threading_timeoutable,
 )
 
 # We run twice the same doctest with two distinct sets of globs
@@ -87,9 +87,9 @@ class TestNesting(unittest.TestCase):
 
 def suite():  # Func for setuptools.setup(test_suite=xxx)
     test_suite = unittest.TestSuite()
-    test_suite.addTest(doctest.DocFileSuite("README.rst", globs=threading_globs))
+    test_suite.addTest(doctest.DocFileSuite("README.md", globs=threading_globs))
     if os.name == "posix":  # Other OS have no support for signal.SIGALRM
-        test_suite.addTest(doctest.DocFileSuite("README.rst", globs=signaling_globs))
+        test_suite.addTest(doctest.DocFileSuite("README.md", globs=signaling_globs))
     return test_suite
 
 
