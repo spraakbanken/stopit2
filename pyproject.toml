@@ -1,0 +1,14 @@
+[project]
+name = "stopit2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Kristoffer Andersson", email = "kristoffer.andersson@gu.se" },
+]
+requires-python = ">=3.9"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
