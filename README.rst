@@ -1,6 +1,8 @@
 ======
-stopit
+stopit2
 ======
+
+*Note* This is a fork of [glenfant/stopit](https://github.com/glenfant/stopit).
 
 Raise asynchronous exceptions in other threads, control the timeout of
 blocks or callables with two context managers and two decorators.
