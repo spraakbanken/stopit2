@@ -1,42 +1,26 @@
-# -*- coding: utf-8 -*-
 """
-============
-stopit.utils
-============
+=============
+stopit2.utils
+=============
 
 Misc utilities and common resources
 """
 
 import functools
 import logging
-import sys
 
 # Custom logger
-LOG = logging.getLogger(name='stopit')
+LOG = logging.getLogger(name="stopit2")
 
-if sys.version_info < (2, 7):
-    class NullHandler(logging.Handler):
-        """Copied from Python 2.7 to avoid getting `No handlers could be found
-        for logger "xxx"` http://bugs.python.org/issue16539
-        """
-        def handle(self, record):
-            pass
-
-        def emit(self, record):
-            pass
-
-        def createLock(self):
-            self.lock = None  # noqa
-else:
-    from logging import NullHandler
-
-LOG.addHandler(NullHandler())
+# Ignore logging by default, let user add logger for `stopit2` explicit.
+LOG.addHandler(logging.NullHandler())
 
 
 class TimeoutException(Exception):
     """Raised when the block under context management takes longer to complete
     than the allowed maximum timeout value.
     """
+
     pass
 
 
@@ -50,6 +34,7 @@ class BaseTimeout(object):
       structure. ``True`` (default) if you just want to check the execution of
       the block with the ``state`` attribute of the context manager.
     """
+
     # Possible values for the ``state`` attribute, self explanative
     EXECUTED, EXECUTING, TIMED_OUT, INTERRUPTED, CANCELED = range(5)
 
@@ -59,13 +44,16 @@ class BaseTimeout(object):
         self.state = BaseTimeout.EXECUTED
 
     def __bool__(self):
-        return self.state in (BaseTimeout.EXECUTED, BaseTimeout.EXECUTING, BaseTimeout.CANCELED)
+        return self.state in (
+            BaseTimeout.EXECUTED,
+            BaseTimeout.EXECUTING,
+            BaseTimeout.CANCELED,
+        )
 
     __nonzero__ = __bool__  # Python 2.x
 
     def __repr__(self):
-        """Debug helper
-        """
+        """Debug helper"""
         return "<{0} in state: {1}>".format(self.__class__.__name__, self.state)
 
     def __enter__(self):
@@ -78,8 +66,12 @@ class BaseTimeout(object):
             if self.state != BaseTimeout.TIMED_OUT:
                 self.state = BaseTimeout.INTERRUPTED
                 self.suppress_interrupt()
-            LOG.warning("Code block execution exceeded {0} seconds timeout".format(self.seconds),
-                        exc_info=(exc_type, exc_val, exc_tb))
+            LOG.warning(
+                "Code block execution exceeded {0} seconds timeout".format(
+                    self.seconds
+                ),
+                exc_info=(exc_type, exc_val, exc_tb),
+            )
             return self.swallow_exc
         else:
             if exc_type is None:
@@ -89,19 +81,17 @@ class BaseTimeout(object):
 
     def cancel(self):
         """In case in the block you realize you don't need anymore
-       limitation"""
+        limitation"""
         self.state = BaseTimeout.CANCELED
         self.suppress_interrupt()
 
     # Methods must be provided by subclasses
     def suppress_interrupt(self):
-        """Removes/neutralizes the feature that interrupts the executed block
-        """
+        """Removes/neutralizes the feature that interrupts the executed block"""
         raise NotImplementedError
 
     def setup_interrupt(self):
-        """Installs/initializes the feature that interrupts the executed block
-        """
+        """Installs/initializes the feature that interrupts the executed block"""
         raise NotImplementedError
 
 
@@ -129,9 +119,10 @@ class base_timeoutable(object):  # noqa
        thz ``to_ctx_mgr`` with a timeout  context manager class which in turn
        must subclasses of above ``BaseTimeout`` class.
     """
+
     to_ctx_mgr = None
 
-    def __init__(self, default=None, timeout_param='timeout'):
+    def __init__(self, default=None, timeout_param="timeout"):
         self.default, self.timeout_param = default, timeout_param
 
     def __call__(self, func):
@@ -146,4 +137,5 @@ class base_timeoutable(object):  # noqa
                 return result
             else:
                 return func(*args, **kwargs)
+
         return wrapper

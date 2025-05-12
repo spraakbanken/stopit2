@@ -1,6 +1,6 @@
 # stopit2
 
-*Note* This is a fork of [glenfant/stopit](https://github.com/glenfant/stopit).
+_Note_ This is a fork of [glenfant/stopit](https://github.com/glenfant/stopit).
 
 Raise asynchronous exceptions in other threads, control the timeout of
 blocks or callables with two context managers and two decorators.
@@ -116,15 +116,15 @@ provided time.
 
 of a `stopit2.ThreadingTimeout` context manager.
 
-| Method / Attribute | Description |
-| --- | --- |
-| `.cancel()` | Cancels the timeout control. This method is intended for use within the block that's under timeout control, specifically to cancel the timeout control. Means that all code executed after this call may be executed till the end. |
-| `.state` | This attribute indicated the actual status of the timeout control. It may take the value of the `EXECUTED`, `EXECUTING`, `TIMED_OUT`, `INTERRUPTED` or `CANCELED` attributes. See below. |
-| `.EXECUTING` | The timeout control is under execution. We are typically executing within the code under control of the context manager. |
-| `.EXECUTED` | Good news: the code under timeout control completed normally within the assigned time frame. |
-| `.TIMED_OUT` | Bad news: the code under timeout control has been sleeping too long. The objects supposed to be created or changed within the timeout controlled block should be considered as non existing or corrupted. Don't play with them otherwise informed. |
-| `.INTERRUPTED` | The code under timeout control may itself raise explicit `stopit2.TimeoutException` for any application logic reason that may occur. This intentional exit can be spotted from outside the timeout controlled block with this state value. |
-| `.CANCELED` | The timeout control has been intentionally canceled and the code running under timeout control did complete normally. But perhaps after the assigned time frame. |
+| Method / Attribute | Description                                                                                                                                                                                                                                        |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.cancel()`        | Cancels the timeout control. This method is intended for use within the block that's under timeout control, specifically to cancel the timeout control. Means that all code executed after this call may be executed till the end.                 |
+| `.state`           | This attribute indicated the actual status of the timeout control. It may take the value of the `EXECUTED`, `EXECUTING`, `TIMED_OUT`, `INTERRUPTED` or `CANCELED` attributes. See below.                                                           |
+| `.EXECUTING`       | The timeout control is under execution. We are typically executing within the code under control of the context manager.                                                                                                                           |
+| `.EXECUTED`        | Good news: the code under timeout control completed normally within the assigned time frame.                                                                                                                                                       |
+| `.TIMED_OUT`       | Bad news: the code under timeout control has been sleeping too long. The objects supposed to be created or changed within the timeout controlled block should be considered as non existing or corrupted. Don't play with them otherwise informed. |
+| `.INTERRUPTED`     | The code under timeout control may itself raise explicit `stopit2.TimeoutException` for any application logic reason that may occur. This intentional exit can be spotted from outside the timeout controlled block with this state value.         |
+| `.CANCELED`        | The timeout control has been intentionally canceled and the code running under timeout control did complete normally. But perhaps after the assigned time frame.                                                                                   |
 
 A typical usage:
 
@@ -216,10 +216,10 @@ or method, this parameter is removed.
 
 `stopit2.SignalTimeout` and `stopit2.signal_timeoutable` have exactly the
 same API as their respective threading based resources, namely
-`stopit2.ThreadingTimeout`*and `stopit2.threading_timeoutable`*.
+`stopit2.ThreadingTimeout`_and `stopit2.threading_timeoutable`_.
 
-See the `comparison chart`*that warns on the more or less subtle differences
-between the `Threading based resources`* and the `Signaling based resources`_.
+See the `comparison chart`_that warns on the more or less subtle differences
+between the `Threading based resources`_ and the `Signaling based resources`\_.
 
 ### Logging
 
@@ -233,17 +233,15 @@ execution exceeds the associated timeout. To turn logging off, just:
    stopit_logger.setLevel(logging.ERROR)
 ```
 
-.. _comparison chart:
-
 ### Comparing thread based and signal based timeout control
 
-| Feature | Threading based resources | Signaling based resources
-| --- | --- | --- |
-| GIL | Can't interrupt a long Python atomic instruction. e.g. if `time.sleep(20.0)` is actually executing, the timeout will take effect at the end of the execution of this line. | Don't care of it
-| Thread safety | **Yes** : Thread safe as long as each thread uses its own `ThreadingTimeout` context manager or `threading_timeoutable` decorator. | **Not** thread safe. Could yield unpredictable results in a multithreads application. |
-| Nestable context managers | **Yes** : you can nest threading based context managers | **No** : never nest a signaling based context manager in another one. The innermost context manager will automatically cancel the timeout control of outer ones.
-| Accuracy | Any positive floating value is accepted as timeout value. The accuracy depends on the GIL interval checking of your platform. See the doc on `sys.getcheckinterval` and `sys.setcheckinterval` for your Python version. | Due to the use of `signal.SIGALRM`, we need provide an integer number of seconds. So a timeout of `0.6` seconds will ve automatically converted into a timeout of zero second!
-| Supported platforms | Any CPython 2.6, 2.7 or 3.3 on any OS with threading support. | Any Python 2.6, 2.7 or 3.3 with `signal.SIGALRM` support. This excludes Windows boxes |
+| Feature                   | Threading based resources                                                                                                                                                                                               | Signaling based resources                                                                                                                                                      |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GIL                       | Can't interrupt a long Python atomic instruction. e.g. if `time.sleep(20.0)` is actually executing, the timeout will take effect at the end of the execution of this line.                                              | Don't care of it                                                                                                                                                               |
+| Thread safety             | **Yes** : Thread safe as long as each thread uses its own `ThreadingTimeout` context manager or `threading_timeoutable` decorator.                                                                                      | **Not** thread safe. Could yield unpredictable results in a multithreads application.                                                                                          |
+| Nestable context managers | **Yes** : you can nest threading based context managers                                                                                                                                                                 | **No** : never nest a signaling based context manager in another one. The innermost context manager will automatically cancel the timeout control of outer ones.               |
+| Accuracy                  | Any positive floating value is accepted as timeout value. The accuracy depends on the GIL interval checking of your platform. See the doc on `sys.getcheckinterval` and `sys.setcheckinterval` for your Python version. | Due to the use of `signal.SIGALRM`, we need provide an integer number of seconds. So a timeout of `0.6` seconds will ve automatically converted into a timeout of zero second! |
+| Supported platforms       | Any CPython >=3.9 on any OS with threading support.                                                                                                                                                                     | Any Python >= 3.9 with `signal.SIGALRM` support. This excludes Windows boxes                                                                                                   |
 
 ## Known issues
 
@@ -281,10 +279,10 @@ managed block or decorated functions are executing.
 
 ### `gevent` support
 
-Threading timeout control as mentioned in `Threading based resources`_ does not work as expected
+Threading timeout control as mentioned in `Threading based resources`\_ does not work as expected
 when used in the context of a gevent worker.
 
-See the discussion in `Issue 13 <https://github.com/glenfant/stopit2/issues/13>`_ for more details.
+See the discussion in `Issue 13 <https://github.com/glenfant/stopit2/issues/13>`\_ for more details.
 
 ## Tests and demos
 
@@ -580,24 +578,26 @@ It works on instance methods too:
 ## Links
 
 Source code (clone, fork, ...)
-  <https://github.com/spraakbanken/stopit2>
+<https://github.com/spraakbanken/stopit2>
 
 Issues tracker
-  <https://github.com/spraakbanken/stopit2/issues>
+<https://github.com/spraakbanken/stopit2/issues>
 
 PyPI
-  <https://pypi.python.org/pypi/stopit2>
+<https://pypi.python.org/pypi/stopit2>
 
 ## Credits
 
 - This is a NIH package which is mainly a theft of `Gabriel Ahtune's recipe
-  <http://gahtune.blogspot.fr/2013/08/a-timeout-context-manager.html>`_ with
+<http://gahtune.blogspot.fr/2013/08/a-timeout-context-manager.html>`\_ with
   tests, minor improvements and refactorings, documentation and setuptools
   awareness I made since I'm somehow tired to copy/paste this recipe among
   projects that need timeout control.
 
-- `Gilles Lenfant <gilles.lenfant@gmail.com>`_: package creator and
-  maintainer.
+- `Gilles Lenfant <gilles.lenfant@gmail.com>`\_: package creator and
+  maintainer (of `stopit`).
+
+- `Språkbanken Text <sb-info@svenska.gu.se>`\_: maintainer of `stopit2`.
 
 ## License
 

@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """
-=================
-stopit.threadstop
-=================
+==================
+stopit2.threadstop
+==================
 
 Raise asynchronous exceptions in other thread, control the timeout of blocks
 or callables with a context manager or a decorator.
@@ -12,7 +11,7 @@ import ctypes
 import sys
 import threading
 
-from .utils import TimeoutException, BaseTimeout, base_timeoutable
+from .utils import BaseTimeout, TimeoutException, base_timeoutable
 
 if sys.version_info < (3, 7):
     tid_ctype = ctypes.c_long
@@ -30,8 +29,9 @@ def async_raise(target_tid, exception):
     """
     # Ensuring and releasing GIL are useless since we're not in C
     # gil_state = ctypes.pythonapi.PyGILState_Ensure()
-    ret = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid_ctype(target_tid),
-                                                     ctypes.py_object(exception))
+    ret = ctypes.pythonapi.PyThreadState_SetAsyncExc(
+        tid_ctype(target_tid), ctypes.py_object(exception)
+    )
     # ctypes.pythonapi.PyGILState_Release(gil_state)
     if ret == 0:
         raise ValueError("Invalid thread ID {}".format(target_tid))
@@ -46,6 +46,7 @@ class ThreadingTimeout(BaseTimeout):
 
     See :class:`stopit.utils.BaseTimeout` for more information
     """
+
     def __init__(self, seconds, swallow_exc=True):
         super(ThreadingTimeout, self).__init__(seconds, swallow_exc)
         self.target_tid = threading.current_thread().ident
@@ -60,22 +61,21 @@ class ThreadingTimeout(BaseTimeout):
 
     # Required overrides
     def setup_interrupt(self):
-        """Setting up the resource that interrupts the block
-        """
+        """Setting up the resource that interrupts the block"""
         self.timer = threading.Timer(self.seconds, self.stop)
         self.timer.start()
 
     def suppress_interrupt(self):
-        """Removing the resource that interrupts the block
-        """
+        """Removing the resource that interrupts the block"""
         self.timer.cancel()
 
 
-class threading_timeoutable(base_timeoutable):  #noqa
+class threading_timeoutable(base_timeoutable):  # noqa
     """A function or method decorator that raises a ``TimeoutException`` to
     decorated functions that should not last a certain amount of time.
     this one uses ``ThreadingTimeout`` context manager.
 
     See :class:`.utils.base_timoutable`` class for further comments.
     """
+
     to_ctx_mgr = ThreadingTimeout
