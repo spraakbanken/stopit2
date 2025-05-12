@@ -234,6 +234,15 @@ wheels = [
 ]
 
 [[package]]
+name = "setuptools"
+version = "80.4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/95/32/0cc40fe41fd2adb80a2f388987f4f8db3c866c69e33e0b4c8b093fdf700e/setuptools-80.4.0.tar.gz", hash = "sha256:5a78f61820bc088c8e4add52932ae6b8cf423da2aff268c23f813cfbb13b4006", size = 1315008, upload-time = "2025-05-09T20:42:27.972Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b1/93/dba5ed08c2e31ec7cdc2ce75705a484ef0be1a2fecac8a58272489349de8/setuptools-80.4.0-py3-none-any.whl", hash = "sha256:6cdc8cb9a7d590b237dbe4493614a9b75d0559b888047c1f67d49ba50fc3edb2", size = 1200812, upload-time = "2025-05-09T20:42:25.325Z" },
+]
+
+[[package]]
 name = "stopit2"
 version = "1.1.2"
 source = { editable = "." }
@@ -244,6 +253,7 @@ dev = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "ruff" },
+    { name = "types-setuptools" },
 ]
 
 [package.metadata]
@@ -254,6 +264,7 @@ dev = [
     { name = "pytest", specifier = ">=8.3.5" },
     { name = "pytest-cov", specifier = ">=6.1.1" },
     { name = "ruff", specifier = ">=0.11.9" },
+    { name = "types-setuptools", specifier = ">=80.4.0.20250511" },
 ]
 
 [[package]]
@@ -293,6 +304,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5b/b9/1ed31d167be802da0fc95020d04cd27b7d7065cc6fbefdd2f9186f60d7bd/tomli-2.2.1-cp313-cp313-win32.whl", hash = "sha256:d3f5614314d758649ab2ab3a62d4f2004c825922f9e370b29416484086b264ec", size = 98724, upload-time = "2024-11-27T22:38:32.837Z" },
     { url = "https://files.pythonhosted.org/packages/c7/32/b0963458706accd9afcfeb867c0f9175a741bf7b19cd424230714d722198/tomli-2.2.1-cp313-cp313-win_amd64.whl", hash = "sha256:a38aa0308e754b0e3c67e344754dff64999ff9b513e691d0e786265c93583c69", size = 109383, upload-time = "2024-11-27T22:38:34.455Z" },
     { url = "https://files.pythonhosted.org/packages/6e/c2/61d3e0f47e2b74ef40a68b9e6ad5984f6241a942f7cd3bbfbdbd03861ea9/tomli-2.2.1-py3-none-any.whl", hash = "sha256:cb55c73c5f4408779d0cf3eef9f762b9c9f147a77de7b258bef0a5628adc85cc", size = 14257, upload-time = "2024-11-27T22:38:35.385Z" },
+]
+
+[[package]]
+name = "types-setuptools"
+version = "80.4.0.20250511"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "setuptools" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/87/f5/27854a6912bb6a13e42ab342409fadc5613bf9d36ac9a69e8211771c5e6a/types_setuptools-80.4.0.20250511.tar.gz", hash = "sha256:faa4159c9384e45b3b04218ca43ee3829efb6acc303e0ee561e47b3404423d32", size = 41205, upload-time = "2025-05-11T03:08:46.257Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ce/f5/9d47c996cb266092ec670edb24603eed527868d1cd68e1af29c81ea56f14/types_setuptools-80.4.0.20250511-py3-none-any.whl", hash = "sha256:972d7d947871cf7594263c764a9c2c2f137660c4ac3ad0cec1d4f1254ca8ae6a", size = 63110, upload-time = "2025-05-11T03:08:44.741Z" },
 ]
 
 [[package]]
