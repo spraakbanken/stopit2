@@ -47,4 +47,4 @@ class signal_timeoutable(base_timeoutable):  # noqa
     See :class:`.utils.base_timoutable`` class for further comments.
     """
 
-    to_ctx_mgr = SignalTimeout
+    to_ctx_mgr = SignalTimeout  # type: ignore [assignment]
