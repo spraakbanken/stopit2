@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import doctest
 import os
 import unittest
@@ -24,6 +23,11 @@ def suite():  # Func for setuptools.setup(test_suite=xxx)
     if os.name == "posix":  # Other OS have no support for signal.SIGALRM
         test_suite.addTest(doctest.DocFileSuite("README.md", globs=threading_globs))
     return test_suite
+
+
+def test_all() -> None:
+    result = unittest.TextTestRunner(verbosity=2).run(suite())
+    assert result.wasSuccessful()
 
 
 if __name__ == "__main__":
