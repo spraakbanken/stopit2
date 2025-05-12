@@ -1,12 +1,7 @@
 import doctest
-<<<<<<< HEAD
 import os
-import time
-||||||| parent of 3b6f4c8 (test: only test signaling timeouts on linux and darwin)
-import os
-=======
 import sys
->>>>>>> 3b6f4c8 (test: only test signaling timeouts on linux and darwin)
+import time
 import unittest
 
 from stopit2 import (
@@ -92,12 +87,12 @@ class TestNesting(unittest.TestCase):
 
 def suite():  # Func for setuptools.setup(test_suite=xxx)
     test_suite = unittest.TestSuite()
-    test_suite.addTest(doctest.DocFileSuite("README.md", globs=threading_globs))
+    test_suite.addTest(doctest.DocFileSuite("../README.md", globs=threading_globs))
     if sys.platform in [
         "linux",
         "darwin",
     ]:  # Other OS have no support for signal.SIGALRM
-        test_suite.addTest(doctest.DocFileSuite("README.md", globs=signaling_globs))
+        test_suite.addTest(doctest.DocFileSuite("../README.md", globs=signaling_globs))
 
     return test_suite
 
