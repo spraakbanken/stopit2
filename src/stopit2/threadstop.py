@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """
-=================
-stopit.threadstop
-=================
+==================
+stopit2.threadstop
+==================
 
 Raise asynchronous exceptions in other thread, control the timeout of blocks
 or callables with a context manager or a decorator.
@@ -12,7 +11,13 @@ import ctypes
 import sys
 import threading
 
+<<<<<<< HEAD
 from .utils import LOG, TimeoutException, BaseTimeout, base_timeoutable
+||||||| parent of abdde3c (update docs to mention stopit2)
+from .utils import TimeoutException, BaseTimeout, base_timeoutable
+=======
+from .utils import BaseTimeout, TimeoutException, base_timeoutable
+>>>>>>> abdde3c (update docs to mention stopit2)
 
 if sys.version_info < (3, 7):
     tid_ctype = ctypes.c_long
@@ -47,10 +52,15 @@ class ThreadingTimeout(BaseTimeout):
 
     See :class:`stopit.utils.BaseTimeout` for more information
     """
+<<<<<<< HEAD
 
     # This class property keep track about who produced the
     # exception.
 
+||||||| parent of abdde3c (update docs to mention stopit2)
+=======
+
+>>>>>>> abdde3c (update docs to mention stopit2)
     def __init__(self, seconds, swallow_exc=True):
         # Ensure that any new handler find a clear
         # pointer

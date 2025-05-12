@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-======
-stopit
-======
+=======
+stopit2
+=======
 
-Public resources from ``stopit``
+Public resources from ``stopit2``
 """
 
 try:
