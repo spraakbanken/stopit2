@@ -86,8 +86,10 @@ class TestNesting(unittest.TestCase):
 
 
 def suite():  # Func for setuptools.setup(test_suite=xxx)
+    print(f"{sys.platform=} {os.name=}")
     test_suite = unittest.TestSuite()
-    test_suite.addTest(doctest.DocFileSuite("../README.md", globs=threading_globs))
+    if sys.platform != "emscripten":
+        test_suite.addTest(doctest.DocFileSuite("../README.md", globs=threading_globs))
     if sys.platform in [
         "linux",
         "darwin",
