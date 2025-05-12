@@ -8,10 +8,11 @@ decorator. Based on the use of signal.SIGALRM
 """
 
 import signal
+import typing as t
 
 from .utils import BaseTimeout, TimeoutException, base_timeoutable
 
-ALARMS = []
+ALARMS: list[tuple[t.Any, int]] = []
 
 
 def handle_alarms(signum, frame):
