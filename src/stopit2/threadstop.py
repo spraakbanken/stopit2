@@ -95,4 +95,4 @@ class threading_timeoutable(base_timeoutable):  # noqa
     See :class:`.utils.base_timoutable`` class for further comments.
     """
 
-    to_ctx_mgr = ThreadingTimeout
+    to_ctx_mgr = ThreadingTimeout  # type: ignore [assignment]
