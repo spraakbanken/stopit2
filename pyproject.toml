@@ -1,14 +1,58 @@
 [project]
 name = "stopit2"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.1.2"
+description = "Timeout control decorator and context managers, raise any exception in another thread"
 readme = "README.md"
 authors = [
+    { name = "Gilles Lenfant", email = "gilles.lenfant@gmail.com" },
+]
+maintainers = [
+    { name = "Språkbanken Text", email = "sb-info@svenska.gu.se" },
     { name = "Kristoffer Andersson", email = "kristoffer.andersson@gu.se" },
 ]
 requires-python = ">=3.9"
 dependencies = []
+license = "MIT"
+license-files = ["LICENSE"]
+classifiers=[
+    "Topic :: Utilities",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Development Status :: 5 - Production/Stable"
+]
+keywords = ["threads timeout"]
+
+[project.urls]
+Homepage = "https://spraakbanken.gu.se"
+Repository = "https://github.com/spraakbanken/stopit2"
+Issues = "https://github.com/spraakbanken/stopit2/issues"
 
 [build-system]
-requires = ["setuptools>=61"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github", "/docs"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/stopit2"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "ruff>=0.11.9",
+    "types-setuptools>=80.4.0.20250511",
+]

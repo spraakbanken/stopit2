@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
 """
-======
-stopit
-======
+=======
+stopit2
+=======
 
-Public resources from ``stopit``
+Public resources from ``stopit2``
 """
+
+from .utils import LOG, TimeoutException  # noqa: F401
 
 try:
     from importlib.metadata import version
@@ -24,7 +25,6 @@ except Exception:
 
 from .signalstop import SignalTimeout, signal_timeoutable
 from .threadstop import ThreadingTimeout, async_raise, threading_timeoutable
-from .utils import LOG, TimeoutException
 
 __all__ = (
     "ThreadingTimeout",
@@ -32,4 +32,5 @@ __all__ = (
     "threading_timeoutable",
     "SignalTimeout",
     "signal_timeoutable",
+    "TimeoutException",
 )
