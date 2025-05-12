@@ -23,9 +23,9 @@ def suite():  # Func for setuptools.setup(test_suite=xxx)
         "linux",
         "darwin",
     ]:  # Other OS have no support for signal.SIGALRM
-        test_suite.addTest(doctest.DocFileSuite("README.md", globs=signaling_globs))
+        test_suite.addTest(doctest.DocFileSuite("../README.md", globs=signaling_globs))
 
-    test_suite.addTest(doctest.DocFileSuite("README.md", globs=threading_globs))
+    test_suite.addTest(doctest.DocFileSuite("../README.md", globs=threading_globs))
     return test_suite
 
 
