@@ -102,7 +102,7 @@ jobs:
       - run: pip install typing-extensions
       - run: pip install -r tests/requirements-testing.lock
       - run: pip install stopit2 --no-index --no-deps --find-links dist --force-reinstall
-      - run: pytest tests.py
+      - run: pytest tests
 
   # https://github.com/marketplace/actions/alls-green#why used for branch protection checks
   release-check:
