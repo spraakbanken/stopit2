@@ -47,7 +47,12 @@ class ThreadingTimeout(BaseTimeout):
     See :class:`stopit.utils.BaseTimeout` for more information
     """
 
+    # This class property keep track about who produced the
+    # exception.
+
     def __init__(self, seconds, swallow_exc=True):
+        # Ensure that any new handler find a clear
+        # pointer
         super(ThreadingTimeout, self).__init__(seconds, swallow_exc)
         self.target_tid = threading.current_thread().ident
         self.timer = None  # PEP8
@@ -57,6 +62,7 @@ class ThreadingTimeout(BaseTimeout):
         caller thread
         """
         self.state = BaseTimeout.TIMED_OUT
+        self.__class__.exception_source = self
         async_raise(self.target_tid, TimeoutException)
 
     # Required overrides

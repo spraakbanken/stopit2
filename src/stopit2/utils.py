@@ -57,22 +57,26 @@ class BaseTimeout(object):
         return "<{0} in state: {1}>".format(self.__class__.__name__, self.state)
 
     def __enter__(self):
+        self.__class__.exception_source = None
         self.state = BaseTimeout.EXECUTING
         self.setup_interrupt()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        exc_src = self.__class__.exception_source
         if exc_type is TimeoutException:
             if self.state != BaseTimeout.TIMED_OUT:
                 self.state = BaseTimeout.INTERRUPTED
                 self.suppress_interrupt()
-            LOG.warning(
-                "Code block execution exceeded {0} seconds timeout".format(
-                    self.seconds
-                ),
+            LOG.debug(
+                "Code block execution exceeded %s seconds timeout",
+                self.seconds,
                 exc_info=(exc_type, exc_val, exc_tb),
             )
-            return self.swallow_exc
+            if exc_src is self:
+                if self.swallow_exc:
+                    self.__class__.exception_source = None
+                    return True
         else:
             if exc_type is None:
                 self.state = BaseTimeout.EXECUTED
